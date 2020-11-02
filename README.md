@@ -1,2 +1,2 @@
-# vue_share
-vue分享
+# vue2_share
+vue2分享
