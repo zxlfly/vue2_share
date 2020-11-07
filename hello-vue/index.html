@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .active {
+            color: red;
+        }
+
+        .errorClass {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 宿主标签 -->
+    <div id="app">
+        <!-- 绑定属性（包括自定义属性）都需要使用v-bind（可以简写成:） ，title为动态值，不是字符串-->
+        <h2 v-bind:title='title'>
+            <!-- 插值文本 -->
+            {{title}}
+        </h2>
+        <!-- 条件渲染 -->
+        <h3 v-if='list.length==0'>没有信息</h3>
+        <!-- 列表渲染 -->
+        <ul>
+            <li v-for="(item,index) in list">{{item}}</li>
+        </ul>
+        <!-- 表单输入 -->
+        <!-- v-model指令在表单input、textarea、select元素上创建双向数据绑定。它会根据控件的类型自动选取正确的方式更新元素。本质上是一种语法糖 -->
+        <input v-model="message" placeholder="输入message">
+        <p>Message is: {{ message }}</p>
+        <!-- 事件处理 -->
+        <button v-on:click="addList">新增课程</button>
+        <!-- class与style绑定 -->
+        <!-- 操作行内样式，css class是常见的需求，因为它们都是属性，所以需要使用v-bind -->
+        <!-- vue对此做了增强，表达式的结果类型除了字符串之外，还可以是对象或数组 -->
+
+        <!-- class -->
+        <!-- active 这个 class 存在与否将取决于数据 isActive -->
+        <div v-bind:class="{ active: isActive }">红色</div>
+        <!-- 数组的形式 -->
+        <!-- 可以使用三目 -->
+        <div v-bind:class="[isActive ? 'active' : '', 'errorClass']">red</div>
+        <div v-bind:class="[{ active: isActive }, 'errorClass']">red</div>
+
+        <!-- style -->
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">activeColor,fontSize</div>
+        <div v-bind:style="styleObject">styleObject</div>
+        <div v-bind:style="[baseStyles, overridingStyles]">baseStyles,overridingStyles</div>
+        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">更详细的介绍查看文档</div>
+
+        <!-- 计算属性和监听器 -->
+        <!-- 模板内的表达式非常便利，但是只适合简单的运算。如果放入太多的逻辑会让模板过重且难以维护，此时应该考虑计算属性和监听器 -->
+        <p>
+            <!-- 绑定表达式 -->
+            <!-- 总数：{{list.length + '门'}} -->
+            <!-- 计算属性 -->
+            <!-- 总数：{{total}} -->
+            <!-- 监听器 -->
+            列表总数（watch）：{{totalCount}}
+            <br>
+            列表总数（computed）：{{computedTotalCount}}
+        </p>
+        
+    </div>
+    <script>
+        // 1.创建vue实例
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    title: 'hello vue!',
+                    list: [
+                        'message01',
+                        'message02'
+                    ],
+                    message: '',
+                    isActive: true,
+                    activeColor: 'green',
+                    fontSize: 18,
+                    styleObject: {
+                        color: 'red',
+                        fontSize: '13px'
+                    },
+                    baseStyles: {
+                        color: 'red',
+                    },
+                    overridingStyles: {
+                        fontSize: '18px'
+                    },
+                    totalCount: 0
+                }
+            },
+            // 事件写在methods中
+            methods: {
+                addList() {
+                    this.list.push('message' + new Date().getTime());
+                }
+            },
+            // 计算属性
+            // 基于响应式的依赖进行缓存，只有相关的依赖数据发生了改变才会重新计算求值。
+            computed: {
+                computedTotalCount() {
+                    return this.list.length 
+                }
+            },
+            // 监听器
+            // 不会缓存,监听的属性为data中的属性
+            //允许我们执行异步操作 (访问一个 API)，限制我们执行该操作的频率，并在我们得到最终结果前，设置中间状态。这些都是计算属性无法做到的。
+            watch: {
+                // 下面这种不能生效，因为初始化时不会触发
+                // list(newValue, oldValue) {
+                //     this.totalCount = newValue.length
+                // },
+                list: {
+                    immediate: true,
+                    // deep: true,
+                    handler(newValue, oldValue) {
+                        this.totalCount = newValue.length
+                    }
+                }
+            },
+            // 生命周期钩子
+            beforeCreate() { 
+                console.log('执行时组件实例还未创建，通常用于插件开发中执行一些初始化任务');
+            }, 
+            created() {
+                console.log('组件初始化完毕，各种数据可以使用，常用于异步数据获取');
+             },
+            beforeMount() {
+                console.log('未执行渲染、更新，dom未创建');
+             }, 
+            mounted() {console.log('初始化结束，dom已创建，可用于获取访问数据和dom元素');}, 
+            beforeUpdate() {console.log('更新前，可用于获取更新前各种状态');},
+            updated() {
+                console.log('更新后，所有状态已是最新');
+            }, 
+            beforeDestroy() {
+                console.log('销毁前，可用于一些定时器或订阅的取消');
+            },
+            destroyed() {
+                console.log('组件已销毁，作用同上');
+            }
+        })
+    </script>
+</body>
+
+</html>

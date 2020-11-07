@@ -1,2 +1,2 @@
-# vue2_share
-vue2分享
+# hello-vue
+最基础的示例
