@@ -16,6 +16,17 @@
         .message-box-close {
             float: right;
         }
+
+        /* 定义过度动画 */
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -46,12 +57,14 @@
                 <p v-if="list.length == 0">没有任何课程信息</p> 
                 <!-- 列表渲染 --> 
                 <ul>
-                    <!-- class绑定 -->
-                    <li 
-                        v-for="c in list" 
-                    >
-                        {{c}}
-                    </li> 
+                    <transition-group name="fade">
+                        <li 
+                            v-for="(x,i) in list" 
+                            :key="i"
+                        >
+                            {{x}}
+                        </li> 
+                    </transition-group>
                 </ul> 
             </div> 
             `,
@@ -81,26 +94,28 @@
                 }
             },
         })
-        Vue.component('message', { 
-            props: ['show'], 
+        Vue.component('message', {
+            props: ['show'],
             template: ` 
-                <div class="message-box" v-if="show"> 
-                    <slot></slot> 
-                    <span class="message-box-close" @click="$emit('update:show', false)">X</span>
-                </div> ` 
-            }
-        )
+                <transition name="fade">
+                    <div class="message-box" v-if="show"> 
+                        <slot></slot> 
+                        <span class="message-box-close" @click="$emit('update:show', false)">X</span>
+                    </div>
+                </transition>
+                 `
+        })
         const app = new Vue({
             el: '#app',
             data: {
                 title: 'zxl',
-                list:[1],
-                show:false
+                list: [1],
+                show: false
             },
             methods: {
                 addlist(e) {
                     this.list.push(e)
-                    this.show=true
+                    this.show = true
                 }
             },
         }) 
