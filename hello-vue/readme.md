@@ -113,7 +113,182 @@ methods: {
 },
 ```
 **列表过度**
-利用transition-group可以对v-for渲染的每个元素应用过度  
+利用transition-group可以对v-for渲染的每个元素应用过度 
+
+# 可复用性 & 组合
+**过滤器filter**  
+  - Vue.js 允许你自定义过滤器，可被用于一些常见的文本格式化。过滤器可以用在两个地方：双花括号插值和 v-bind 表达式
+  - 过滤器是函数可以接受参数
+  - 过滤器可以串联使用
+  - 全局的和局部的重名，局部的覆盖全局的
+  - 分为全局和组件内
+    - 全局用法
+      - ```
+      Vue.filter('capitalize', function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      })
+      ```  
+    - 组件内
+      - ```
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ''
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+      }
+    ```
+**自定义指令directive**
+  - 除了核心功能默认内置的指令 (v-model 和 v-show)，Vue 也允许注册自定义指令。
+  - 钩子函数
+    - **bind**只调用一次，指令第一次绑定到元素时调用。在这里可以进行初始化设置
+    - **inserted**被绑定元素插入到父节点时调用，此时父节点存在但不一定已经插入到了dom中
+    - **update**所在组件的VNode更新时调用，但是子组件VNode不一定更新了。指令的值可能发生改变也可能没有，可以通过比较更新前的值来忽略不必要的模板更新
+    - **componentUpdated**指令所在的组件的VNode以及其子组件的Vnode都更新之后调用
+    - **unbind**指令与元素解绑的时候调用一次
+  - 钩子函数参数
+    - **el**指令绑定的元素，可以用来dom操作
+    - **binding**一个对象
+      - *name*：指令名
+      - *value*：指令的绑定值，例如：v-my-directive="1 + 1" 中，绑定值为 2
+      - *oldValue*：指令绑定的前一个的值，仅在update和componentUpdated中可用
+      - *expression*：字符串形式的指令表达式。例如 v-my-directive="1 + 1" 中，表达式为 "1 + 1"
+      - *arg*：传给指令的参数，可选。例如 v-my-directive:foo 中，参数为 "foo"
+      - *modifiers*：一个包含修饰符的对象。例如：v-my-directive.foo.bar 中，修饰符对象为 { foo: true, bar: true }
+      - *vnode*：Vue编译时生成的虚拟节点
+      - *oldVnode*：上一个虚拟节点，仅在update和componentUpdated中可用
+    - **el**指令绑定的元素，可以用来dom操作
+  - 分为全局和组件内
+    - 全局用法
+      - ```
+      - // 注册一个全局自定义指令 `v-focus`
+      Vue.directive('focus', {
+        // 当被绑定的元素插入到 DOM 中时
+        inserted: function (el) {
+        // 聚焦元素
+        el.focus()
+      }
+      })
+      ```  
+    - 组件内
+      - ```
+      directives: {
+        focus: {
+          // 指令的定义
+          inserted: function (el) {
+            el.focus()
+          }
+        }
+      }
+    ```
+**函数渲染**
+在实际的项目开发中大多数情况下用不到，写起来相对于模板的形式来书复杂  
+当模板代码冗长时，可以考虑使用函数渲染，利用js的能力编译能力减少代码量  
+将组件的templateg改用render函数实现
+```
+render: function (createElement) {
+    return createElement(
+      ...
+    )
+  }
+```
+平时我们看到的h函数就是createElement,h函数返回的就是大名鼎鼎的虚拟dom  
+虚拟dom就是一个原生的js对象，用来描述dom结构属性的（后面源码部分在做展开）  
+h函数相关的参数用法可以查看vue2的官网，此次分享不会详细介绍函数渲染  
+由于函数渲染的特性，我们还可以使用jsx，函数式组件（和react类似，在react的分享中会详细介绍）
+**函数式组件**：组件没有管理任何状态，也没有监听任何传递给它的状态，也没有生命周期方法时，可以将组件标记为
+functional ，这意味它无状态 (没有响应式数据)，也没有实例 (没有 this 上下文)。  
+
+# 混入mixin
+提供了一种很灵活的方式来分发可复用的功能。  
+一个混入对象可以包含任意组件对象。
+当组件使用混入对象时，所有混入对象的选项都将被“混入”到该组件本身的选项  
+```
+// 定义一个混入对象
+var myMixin = {
+  created: function () {
+    this.hello()
+  },
+  methods: {
+    hello: function () {
+      console.log('hello from mixin!')
+    }
+  }
+}
+
+// 定义一个使用混入对象的组件
+var Component = Vue.extend({
+  mixins: [myMixin]
+})
+
+var component = new Component() // => "hello from mixin!"
+```
+# 插件
+插件通常用来为 Vue 添加全局功能。插件的功能范围没有严格的限制——一般有下面几种：
+1. 添加全局方法或者property
+2. 添加全局资源：指令、过滤器等。如vue-touch
+3. 通过全局混入一些组件选项
+4. 添加Vue实例方法，通过把它们添加到Vue.property上实现
+5. 一个库，提供自己的api，同时提供上面的一个或多个功能
+**插件开发**
+Vue.js 的插件应该暴露一个 install 方法。这个方法的第一个参数是 Vue 构造器，第二个参数是一个可选的选项对象：
+```
+MyPlugin.install = function (Vue, options) {
+  // 1. 添加全局方法或 property
+  Vue.myGlobalMethod = function () {
+    // 逻辑...
+  }
+
+  // 2. 添加全局资源
+  Vue.directive('my-directive', {
+    bind (el, binding, vnode, oldVnode) {
+      // 逻辑...
+    }
+    ...
+  })
+
+  // 3. 注入组件选项
+  Vue.mixin({
+    created: function () {
+      // 逻辑...
+    }
+    ...
+  })
+
+  // 4. 添加实例方法
+  Vue.prototype.$myMethod = function (methodOptions) {
+    // 逻辑...
+  }
+}
+```
+**使用插件**
+使用Vue.use即可引入插件,需要在你调用 new Vue()之前
+``Vue.use(MyPlugin)``
+Vue.use 会自动阻止多次注册相同插件，届时即使多次调用也只会注册一次该插件。  
+Vue.js 官方提供的一些插件 (例如 vue-router) 在检测到 Vue 是可访问的全局变量时会自动调用 Vue.use()。
+```
+const MyPlugin = { 
+  install (Vue, options) { 
+    Vue.component('heading', {...})
+  }
+}
+if (typeof window !== 'undefined' && window.Vue) { 
+  window.Vue.use(MyPlugin) 
+}
+```
+然而在像 CommonJS 这样的模块环境中，你应该始终显式地调用 Vue.use()：  
+```
+// 用 Browserify 或 webpack 提供的 CommonJS 模块环境时
+var Vue = require('vue')
+var VueRouter = require('vue-router')
+
+// 不要忘了调用此方法
+Vue.use(VueRouter)
+```
+
+
 ## MVVM  
 三要素：响应式、模板引擎和渲染  
 响应式：Vue如何监听数据变化？  
