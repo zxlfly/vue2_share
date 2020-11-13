@@ -14,18 +14,18 @@
 
 <script>
     export default {
-        nameL:'list',
+        props:{
+            // 新增课程时也要访问list，因此作为属性传递 
+            list: { type: Array, default: ()=>[] },
+        },
         data() {
             return {
             }
         },
-        props: {
-            // 新增课程时也要访问list，因此作为属性传递 
-            list: { type: Array, default: [] },
-        },
+        
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

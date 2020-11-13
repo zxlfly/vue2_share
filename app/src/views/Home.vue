@@ -13,7 +13,7 @@ export default {
     return {
       list: [
         {
-          'path':'/about',
+          'path':'/listpage',
           'des':'基础示例中的addlist'
         }
       ]
