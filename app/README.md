@@ -159,5 +159,6 @@ JS中访问
     ```
 
 # 路由
-
+vue-router相关示例。具体介绍查看router文件夹下的readme
 # 状态管理
+vuex相关示例。具体介绍查看store文件夹下的readme

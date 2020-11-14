@@ -18,6 +18,9 @@ export default {
     },
     methods: {
         addlist() {
+            if(this.item.trim()==''){
+                return
+            }
             // 发送自定义事件通知父组件
             // 注意事件名称定义时不要有大写字母出现
             this.$emit("add-list", this.item);

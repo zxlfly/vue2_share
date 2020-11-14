@@ -15,14 +15,36 @@ export default {
         {
           'path':'/listpage',
           'des':'基础示例中的addlist'
+        },{
+          'path':{
+            name:'About',
+            params:{
+              des:'命名路由-路由传参'
+            }
+          },
+          'des':'命名路由-路由传参'
+        },{
+          'path':{
+            name:'fruit',
+          },
+          'des':'嵌套路由'
+        },{
+          'path':{
+            name:'RoutingGuard',
+          },
+          'des':'路由守卫'
+        },{
+          'path':'/dynamicrouting',
+          'des':'动态添加路由'
         }
       ]
     }
   },
   methods: {
     toPage(path) {
-      // 字符串
       this.$router.push(path)
+      // 字符串
+      // this.$router.push('path')
       // 对象
       //router.push({ path: 'home' })
       // 命名的路由
