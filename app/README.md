@@ -148,8 +148,8 @@ JS中访问
   - 设置开发服务器代理选项可以有效避免调用接口时出现的跨域问题。
     - ```devServer: { proxy: 'http://localhost:3000' }```
   - 自定义测试接口
-    - ```
-    // 需要安装express：npm i express 
+    ```
+    // 需要安装express：npm i express   
     const express = require('express') 
     const app = express() 
     app.get('/api/courses', (req, res) => { 
