@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{number}}</p>
+        <button @click='addNum'>add</button>
+        <p v-text='number'></p>
+        <p v-html='number'></p>
+        <input type="text" v-model='number' />
+    </div>
+    <script src="./myVue.js"></script>
+    <script>
+        const app =new MyVue({
+            el:'#app',
+            data:{
+                number : 1
+            },
+            methods:{
+                addNum(){
+                    this.number++
+                }
+            }
+        })
+        // setInterval(()=>{
+        //     app.number++
+        // },1000)
+    </script>
+</body>
+</html>
