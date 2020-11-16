@@ -20,12 +20,10 @@ const routes = [
   },{
     path: '/about',
     name: 'About',
-    //延迟加载，在被访问的时候才会加载。可以减小初次加载的文件大小 
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },{
     path: '/fruitlist',
     name: 'fruit',
-    //延迟加载，在被访问的时候才会加载。可以减小初次加载的文件大小 
     component: () => import(/* webpackChunkName: "about" */ '../views/Fruit.vue'),
     children:[
       {
@@ -55,16 +53,16 @@ const routes = [
     //   }else{
     //     next()
     //   }
-    
     // }
   },{ 
-    // 会匹配所有路径 
     path: '/login', 
     component: () => import('../views/login.vue') 
   },{ 
-    // 会匹配所有路径 
     path: '/add', 
     component: () => import('../views/Add.vue') 
+  },{ 
+    path: '/vuex', 
+    component: () => import('../views/vuex.vue') 
   },{ 
     // 会匹配所有路径 
     path: '*', 

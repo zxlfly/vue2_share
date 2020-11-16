@@ -36,6 +36,9 @@ export default {
         },{
           'path':'/dynamicrouting',
           'des':'动态添加路由'
+        },{
+          'path':'/vuex',
+          'des':'vuex'
         }
       ]
     }

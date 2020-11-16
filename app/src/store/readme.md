@@ -28,8 +28,9 @@ mapState(namespace?: string, map: Array<string> | Object<string | function>): Ob
     - 可以使用箭头函数返回
     - 可以设置别名
     - 可以是一个函数返回一个处理过后的值
-    - ```
-     computed: mapState({
+    - 
+    ```
+     computed: mapState({  
         // 箭头函数可使代码更简练
         count: state => state.count,
 
