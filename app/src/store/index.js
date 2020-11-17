@@ -5,7 +5,6 @@ import Count2 from './modules/count2'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  
   modules: {
     Count1,
     Count2
