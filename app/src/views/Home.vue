@@ -39,6 +39,9 @@ export default {
         },{
           'path':'/vuex',
           'des':'vuex'
+        },{
+          'path':'/compopnents',
+          'des':'自定义表单组件'
         }
       ]
     }

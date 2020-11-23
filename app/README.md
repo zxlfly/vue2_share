@@ -162,3 +162,120 @@ JS中访问
 vue-router相关示例。具体介绍查看router文件夹下的readme
 # 状态管理
 vuex相关示例。具体介绍查看store文件夹下的readme
+
+# 组件化
+任意的应用界面都可以抽象成为一个组件树。组件化能提高开发效率，方便复用，简化调试步骤，提升项目的可维护性，便于多人协同开发。  
+将参照elementUI2的表单组件实现一个表单组。
+**组件通信常⽤⽅式**
+- **props**  
+  ```
+    //父传子
+    //child 和data同级别
+    props: { msg: String }
+    //parent
+    <child  msg='我是参数' />
+  ```
+- **vuex**:创建唯⼀的全局数据管理者store，通过它管理数据并通知组件状态变更。
+- **$emit/$on**  
+  ```
+    //子传父
+    //child 事件中触发
+    this.$emit('funcname',data)
+    //parent 
+    <child  @funcname='func' />
+  ```
+- **event bus**
+  ```
+  // main.js
+  Vue.prototype.$bus = new Vue()
+  // child1
+  this.$bus.$on('foo', handle)
+  // child2
+  this.$bus.$emit('foo')
+  ```
+**边界情况**
+- **children**:⽗组件可以通过$children访问⼦组件实现⽗⼦通信。
+```
+// parent
+this.$children[0].xx = 'xxx'
+```
+- **$parent**
+```
+//兄弟之间
+// brother1
+this.$parent.$on('foo', handle)
+// brother2
+this.$parent.$emit('foo')
+```
+- **$root**：通过共同祖辈搭桥
+- **$refs**:获取⼦节点引⽤
+- **provide/inject**:能够实现祖先和后代之间传值
+```
+//注入组件
+provide() {
+    return {foo: 'foo'} 
+}
+//其子组件都可以使用
+inject: ['foo']
+```
+- **非props特性**
+  - **$attrs**
+    - 包含了父作用域中不作为 prop 被识别 (且获取) 的 attribute 绑定 (class 和 style 除外)。当一个组件没有声明任何 prop 时，这里会包含所有父作用域的绑定 (class 和 style 除外)，并且可以通过 v-bind="$attrs" 传入内部组件
+  - **$listeners**
+    - 包含了父作用域中的 (不含 .native 修饰器的) v-on 事件监听器。它可以通过 v-on="$listeners" 传入内部组件
+    - 例如在孙子组件内$emit一个事件，通常我们是在父组件中完成对应的操作，因为父组件使用了该组件，但是如果我们想在爷爷组件处理的话就可以用这个属性转到爷爷上去处理
+
+## 插槽
+插槽语法是Vue 实现的内容分发 API，⽤于复合组件开发。该技术在通⽤组件库开发中有⼤量应⽤。
+- **匿名插槽**
+```
+// comp hello会显示在slot处
+<div> 
+    <slot></slot>
+</div>
+// parent
+<comp>hello</comp>
+```
+- **具名插槽**:将内容分发到⼦组件指定位置
+```
+// comp
+<div> 
+    <slot></slot> 
+    <slot name="content"></slot>
+</div>
+// parent
+<Comp>
+    <!-- 默认插槽⽤default做参数 -->
+    <template v-slot:default>具名插槽</template>
+    <!-- 具名插槽⽤插槽名做参数 -->
+    <template v-slot:content>内容...</template>
+</Comp>
+```
+- **作用域插槽**:分发内容要⽤到⼦组件中的数据
+```
+// comp
+<div> 
+    <slot :foo="foo"></slot>
+</div>
+// parent
+<Comp>
+    <!-- 把v-slot的值指定为作⽤域上下⽂对象 -->
+    <template v-slot:default="slotProps">
+    来⾃⼦组件数据：{{slotProps.foo}}
+    </template>
+</Comp>
+```
+
+## Form 通⽤表单组件，收集数据、校验数据并提交。
+- 表单Form
+  - 载体输入数据model和校验规则rules
+  - 校验validate
+- 表单项FormItem
+  - 载体包含输入项
+  - label标签添加
+  - 校验执行者
+  - 显示错误信息
+- FormInput
+  - 双绑
+  - 图标
+  - 操作触发反馈

@@ -64,6 +64,9 @@ const routes = [
     path: '/vuex', 
     component: () => import('../views/vuex.vue') 
   },{ 
+    path: '/compopnents', 
+    component: () => import('../views/compopnents.vue') 
+  },{ 
     // 会匹配所有路径 
     path: '*', 
     component: () => import('../views/404.vue') 
