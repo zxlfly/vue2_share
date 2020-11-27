@@ -11,8 +11,11 @@
 </template>
 
 <script>
+import emitter from '../../mixins/emitter'
 export default {
     name: "FormItem",
+    componentName: "FormItem",
+    mixins:[emitter],
     inject: ["form"],
     props: {
         label: {
@@ -26,14 +29,17 @@ export default {
     },
     data() {
         return {
-            error: "error",
+            error: "",
         };
     },
     mounted() {
-        // 监听校验时间
+        // 监听校验事件
         this.$on("validate", () => {
             this.validate();
         });
+        if(this.prop){
+            this.dispatch('Form','formItemAdd',this);
+        }
     },
     methods: {
         // 校验函数
@@ -42,19 +48,19 @@ export default {
         validate() {
             // 通过inject: ['form']来获取队形的规则和值
             // 获取对应FormItem校验规则
-            const rule = this.form.rules[this.prop]
+            const rule = this.form.rules[this.prop];
             // 获取校验值
-            const value = this.form.model[this.prop]
+            const value = this.form.model[this.prop];
             // 返回一个执行承诺promise
-            return new Promise((resolve, reject)=>{
-                if(rule.required&&value==''){
-                    reject(false)
-                    this.error=rule.message
-                }else{
-                    resolve(true)
-                    this.error=''
+            return new Promise((resolve, reject) => {
+                if (rule.required && value == "") {
+                    reject(false);
+                    this.error = rule.message;
+                } else {
+                    resolve(true);
+                    this.error = "";
                 }
-            })
+            });
         },
     },
 };
