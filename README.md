@@ -3,6 +3,7 @@
 
 # app
 关于工程化，组件化以及常用插件库的介绍
-
+# router-vuex
+实现一个简版的router和vuex
 # myVue
 手写一个简版的vue
