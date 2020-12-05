@@ -17,6 +17,7 @@
     import Form from '../components/Form/Form'
     import FormItem from '../components/Form/FormItem'
     import FormInput from '../components/Form/FormInput'
+    import Notice from '../components/Notice'
     export default {
         components: {
             Form,FormItem,FormInput
@@ -43,11 +44,16 @@
             // 提交表单 通过ref操作
             submit() {
                 this.$refs['loginForm'].validate(res=>{
-                    if(res){
-                        alert('校验通过！')
-                    }else{
-                        alert('校验失败！')
-                    }
+                    this.$create(Notice,{
+                            title: "社会你龙哥，人狠话不多！",
+                            message: res ? "校验通过！!" : "校验失败！!",
+                            duration: 1000
+                        }).show()
+                    // if(res){
+                    //     alert('校验通过！')
+                    // }else{
+                    //     alert('校验失败！')
+                    // }
                 })
             }
         },
