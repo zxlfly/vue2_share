@@ -21,6 +21,7 @@ const obj={
         a:1
     }
 }
+// 解决对象嵌套的问题，嵌套在里层的属性不会被代理
 function observe(obj){
     if(typeof obj !='object'||obj===null){
         return obj
