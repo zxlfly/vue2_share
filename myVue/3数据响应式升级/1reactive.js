@@ -1,5 +1,5 @@
+// 通过get set方法就形成了闭包，可以有效的将值保存在内存中
 function defineReactive(obj , key ,val){
-
     Object.defineProperty(obj,key,{
         get(){
             console.log(`get ${key}`);
@@ -21,7 +21,7 @@ const obj={
         a:1
     }
 }
-// 解决对象嵌套的问题，嵌套在里层的属性不会被代理
+// 不对外暴露defineReactive
 function observe(obj){
     if(typeof obj !='object'||obj===null){
         return obj
@@ -35,6 +35,6 @@ obj.foo
 obj.foo=666
 obj.bar
 obj.bar=666
-
-// obj.obj.a
-// obj.obj.a=666
+// 不能处理嵌套
+obj.obj.a
+obj.obj.a=666

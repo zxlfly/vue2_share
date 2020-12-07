@@ -7,6 +7,7 @@ function defineReactive(obj , key ,val){
         },
         set(newVal){
             if(newVal!=val){
+                // 新值是对象需要做响应式处理
                 observe(newVal)
                 console.log(`set ${key}`);
                 val=newVal
@@ -39,6 +40,7 @@ obj.obj.a=666
 obj.obj={
     a:9
 }
+// 如果直接设置一个新的属性  需要实现一个方法实现响应式
 obj.z=6
 obj.z
 obj.z=6
