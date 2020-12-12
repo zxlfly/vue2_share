@@ -7,3 +7,5 @@
 实现一个简版的router和vuex
 # myVue
 手写一个简版的vue
+
+# vue2核心源码[思维导图](https://www.processon.com/view/link/5f7fcc4ee0b34d0711f7c54d)
