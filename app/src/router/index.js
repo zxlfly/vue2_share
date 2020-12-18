@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
+// 解决重复路由点击的时候报错
 const originalPush = VueRouter.prototype.push
    VueRouter.prototype.push = function push(location) {
    return originalPush.call(this, location).catch(err => err)
@@ -16,15 +17,16 @@ const routes = [
     path: '/listpage',
     name: 'ListPage',
     //延迟加载，在被访问的时候才会加载。可以减小初次加载的文件大小 
-    component: () => import(/* webpackChunkName: "about" */ '../views/ListPage.vue')
+    component: () => import( '../views/ListPage.vue')
   },{
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import( '../views/About.vue')
   },{
     path: '/fruitlist',
     name: 'fruit',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Fruit.vue'),
+    component: () => import('../views/Fruit.vue'),
+    // 嵌套路由
     children:[
       {
         path: '/fruitlist/detail/:name', 
