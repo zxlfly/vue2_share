@@ -20,7 +20,7 @@
     import Notice from '../components/Notice'
     export default {
         components: {
-            Form,FormItem,FormInput
+            Form,FormItem,FormInput,Notice
         },
         data() {
             return {

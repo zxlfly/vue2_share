@@ -1,4 +1,4 @@
-export default state=>{
+export default store=>{
     // store初始化的时候，将储存在localstoreage中的状态还原
     if(localStorage){
         const user = JSON.parse(localStorage.getItem('userInfo'))
