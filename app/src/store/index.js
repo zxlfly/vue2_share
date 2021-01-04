@@ -12,5 +12,5 @@ export default new Vuex.Store({
   },
   strict:true,
   // 这里只是实例 没有实际的状态
-  // plugins:['user']
+  // plugins:[user]
 })
