@@ -42,6 +42,9 @@ export default {
         },{
           'path':'/compopnents',
           'des':'自定义表单组件'
+        },{
+          'path':'/virtualList',
+          'des':'虚拟滚动列表'
         }
       ]
     }

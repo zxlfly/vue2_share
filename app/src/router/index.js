@@ -66,6 +66,9 @@ const routes = [
     path: '/vuex', 
     component: () => import('../views/vuex.vue') 
   },{ 
+    path: '/virtualList', 
+    component: () => import('../views/VirtualList.vue') 
+  },{ 
     path: '/compopnents', 
     component: () => import('../views/compopnents.vue') 
   },{ 
