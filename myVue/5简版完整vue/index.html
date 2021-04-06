@@ -10,7 +10,8 @@
         <p>{{number}}</p>
         <button @click='addNum'>add</button>
         <p v-text='number'></p>
-        <p v-html='number'></p>
+        <p v-html='str'></p>
+        <div>{{obj.z}}</div>
         <input type="text" v-model='number' />
     </div>
     <script src="./myVue.js"></script>
@@ -18,11 +19,19 @@
         const app =new MyVue({
             el:'#app',
             data:{
-                number : 1
+                obj:{
+                    b:2
+                },
+                number : 1,
+                str:"<p v-text='number'>v-html</p>"
             },
             methods:{
                 addNum(){
                     this.number++
+                    this.obj={
+                        a:999
+                    }
+                    console.log(this.obj);
                 }
             }
         })

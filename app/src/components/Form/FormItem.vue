@@ -51,6 +51,7 @@ export default {
             const rule = this.form.rules[this.prop];
             // 获取校验值
             const value = this.form.model[this.prop];
+            console.log(rule,value);
             // 返回一个执行承诺promise
             return new Promise((resolve, reject) => {
                 if (rule.required && value == "") {

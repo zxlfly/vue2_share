@@ -32,6 +32,7 @@ function defineReactive(obj , key ,val){
 }
 
 function observe(obj){
+    
     if(typeof obj !='object'||obj===null){
         return obj
     }
@@ -92,10 +93,12 @@ class Compile{
             //     console.log('文本节点',node.textContent);
             // }
             if(node.nodeType===1){
-                this.compileElement(node)
+                // 有子节点先编译子节点，可以解决在v-html的时候多次编译导致结果不对
                 if(node.childNodes){
                     this.compile(node)
                 }
+                this.compileElement(node)
+                
             }else if(this.IsInter(node)){
                 this.compileText(node)
             }
@@ -126,6 +129,9 @@ class Compile{
         fn&&fn(node,this.$vm[exp])
         console.log(this.$vm[exp]);
         //更新函数
+        // new Watcher(this.$vm,exp,(value)=>{
+        //     fn(node,value)
+        // })
         new Watcher(this.$vm,exp,(value)=>{
             fn(node,value)
         })
@@ -134,7 +140,7 @@ class Compile{
         node.textContent=value
     }
     htmlUpdater(node,value){
-        node.innerHTML=value
+        node.innerHTML=value 
     }
     // {{xxx}}
     compileText(node){
