@@ -123,7 +123,8 @@ methods: {
   - 全局的和局部的重名，局部的覆盖全局的
   - 分为全局和组件内
     - 全局用法
-      - ```
+      - 
+      ```
       Vue.filter('capitalize', function (value) {
         if (!value) return ''
         value = value.toString()
@@ -131,7 +132,8 @@ methods: {
       })
       ```  
     - 组件内
-      - ```
+      - 
+      ```
       filters: {
         capitalize: function (value) {
           if (!value) return ''

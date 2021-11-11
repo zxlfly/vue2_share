@@ -106,7 +106,7 @@ CSS Modules 是一个流行的，用于模块化和组合 CSS 的系统。 vue-l
 <a :class="$style.red">awesome-vue</a> 
 <a :class="{[$style.red]:isRed}">awesome-vue</a> 
 <a :class="[$style.red, $style.bold]">awesome-vue</a>
-```
+```  
 JS中访问
 ```
 <script> 
@@ -284,7 +284,8 @@ inject: ['foo']
 *VirtualList*  
 本示例的是最基础的实现方法，原理就是一个最外层的滚动容器**container**，高度为可视区域的高度；里面放一个撑大小的容器**box**，高度为所有列表项的高度和；和这个撑大小的容器还有一个真正显示列表的容器**list**，高度为可视区域的高度；这个列表容器内部为列表项。
 - container
-  - ```
+  - 
+  ```
   overflow: auto;
   position: relative;
   -webkit-overflow-scrolling: touch;
