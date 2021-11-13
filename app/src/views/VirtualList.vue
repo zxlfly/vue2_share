@@ -2,62 +2,78 @@
   <div ref="list" class="infinite-list-container" @scroll="scrollEvent($event)">
     <div class="infinite-list-phantom" :style="{ height: listHeight + 'px' }"></div>
     <div class="infinite-list" :style="{ transform: getTransform }">
-      <div v-for="x in visibleData" :key='x.id' class="item" :style="{ height: itemSize + 'px'}">
-        {{x.val}}
-      </div>
+      <div
+        v-for="x in visibleData"
+        :key="x.id"
+        :id="x.id"
+        class="item"
+        :style="{ height: itemSize + 'px' }"
+      >{{ x.val }}</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name:'VirtualList',
-  created () {
+  name: 'VirtualList',
+  created() {
     let arr = []
     for (let i = 0; i < 1000; i++) {
       arr.push({
-        id:'id'+i,
-        val:i
+        id: 'id' + i,
+        val: i
       })
     }
-    this.listData=arr
+    this.listData = arr
   },
-  computed:{
+  computed: {
     //列表总高度
-    listHeight(){
+    listHeight() {
       return this.listData.length * this.itemSize;
     },
     //可显示的列表项数
-    visibleCount(){
+    visibleCount() {
       return Math.ceil(this.screenHeight / this.itemSize)
     },
     //偏移量对应的style
-    getTransform(){
+    getTransform() {
       return `translate3d(0,${this.startOffset}px,0)`;
     },
     //获取真实显示列表数据
-    visibleData(){
-      console.log(this.listData,this.start,this.end)
-      return this.listData.slice(this.start, Math.min(this.end,this.listData.length));
-    }
+    visibleData() {
+      let start = this.start - this.aboveCount;
+      let end = this.end + this.belowCount;
+      return this.listData.slice(start, end);
+      // return this.listData.slice(this.start, Math.min(this.end, this.listData.length));
+    },
+    // 上区间缓冲
+    aboveCount() {
+      return Math.min(this.start, this.bufferScale * this.visibleCount)
+    },
+    // 下区间缓冲
+    belowCount() {
+      return Math.min(this.listData.length - this.end, this.bufferScale * this.visibleCount);
+    },
   },
   mounted() {
-    this.screenHeight=document.documentElement.clientHeight
+    this.screenHeight = document.documentElement.clientHeight
     this.start = 0;
     this.end = this.start + this.visibleCount;
   },
   data() {
     return {
-      itemSize:100,
-      listData:[],
+      itemSize: 100,
+      listData: [],
       //可视区域高度
-      screenHeight:0,
+      screenHeight: 0,
       //偏移量
-      startOffset:0,
+      startOffset: 0,
       //起始索引
-      start:0,
+      start: 0,
       //结束索引
-      end:4,
+      end: 4,
+      // 缓冲比例
+      bufferScale: 1
     };
   },
   methods: {
@@ -70,8 +86,16 @@ export default {
       this.end = this.start + this.visibleCount;
       //此时的偏移量
       // this.startOffset = scrollTop
-      this.startOffset = scrollTop - (scrollTop % this.itemSize);
-      console.log(scrollTop,this.startOffset);
+      if (this.start >= 1) {
+        let len = this.visibleCount * this.bufferScale
+        // console.log(this.start >= len);
+        if (this.start >= len) {
+          this.startOffset = scrollTop - (scrollTop % this.itemSize) - len * this.itemSize
+        }
+      } else {
+        this.startOffset = scrollTop - (scrollTop % this.itemSize)
+      }
+      // this.startOffset = scrollTop - (scrollTop % this.itemSize);
     }
   }
 };
@@ -79,7 +103,7 @@ export default {
 
 
 <style>
-body{
+body {
   padding: 0;
   margin: 0;
 }
@@ -111,7 +135,7 @@ body{
   color: #555;
   border-bottom: 1px solid #999;
 }
-.item{
+.item {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -44,7 +44,10 @@ export default {
           'des':'自定义表单组件'
         },{
           'path':'/virtualList',
-          'des':'虚拟滚动列表'
+          'des':'虚拟滚动列表定高'
+        },{
+          'path':'/virtualListAutoH',
+          'des':'虚拟滚动列表不定高'
         }
       ]
     }

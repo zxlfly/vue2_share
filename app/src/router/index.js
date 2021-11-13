@@ -69,6 +69,9 @@ const routes = [
     path: '/virtualList', 
     component: () => import('../views/VirtualList.vue') 
   },{ 
+    path: '/virtualListAutoH', 
+    component: () => import('../views/VirtualListAutoH.vue') 
+  },{ 
     path: '/compopnents', 
     component: () => import('../views/compopnents.vue') 
   },{ 
