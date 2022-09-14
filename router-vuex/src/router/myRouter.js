@@ -24,6 +24,7 @@ class VueRouter {
         this.$options = options
         // 设置响应式的current
         const init = window.location.hash.slice(1) || '/'
+        // 因为this本身不是响应式的，所以不能直接使用set api
         Vue.util.defineReactive(this,'current',init)
         // 监听hashchange事件
         window.addEventListener('hashchange',this.onHashChange.bind(this))
