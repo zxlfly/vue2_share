@@ -93,7 +93,7 @@ export default {
           this.startOffset = scrollTop - (scrollTop % this.itemSize) - len * this.itemSize
         }
       } else {
-        this.startOffset = scrollTop - (scrollTop % this.itemSize)
+        this.startOffset = 0
       }
       // this.startOffset = scrollTop - (scrollTop % this.itemSize);
     }
